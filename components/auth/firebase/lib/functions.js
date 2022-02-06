@@ -123,11 +123,11 @@ export const withFirebaseAuthUser = (options) => (ChildComponent) => {
 }
 
 export const useFirebaseAuthUser = () => {
-  if(initAuthHelper.getInitAuthResult().success){
-    return useAuthUser();
-  } else {
+  const user = useAuthUser();
+  if(!initAuthHelper.getInitAuthResult().success){
     return createEmptyAuthUser();
   }
+  return user;
 }
 
 const handleFBNotInitError = async (context,getServerSidePropsFunc) => {
@@ -176,7 +176,7 @@ export const withFirebaseAuthUserTokenSSR = (options) => (getServerSidePropsFunc
   }
 }
 
-export default {
+const functions = {
   getInitAuthResult,
   createEmptyAuthUser,
   initAuth,
@@ -184,4 +184,6 @@ export default {
   withFirebaseAuthUser,
   withFirebaseAuthUserSSR,
   withFirebaseAuthUserTokenSSR
-};
+}
+
+export default functions;

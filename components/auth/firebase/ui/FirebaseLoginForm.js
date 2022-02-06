@@ -154,7 +154,7 @@ export default function FirebaseLoginForm({onSignupClick}){
                 diffCredError &&
                 <div className="p-1 mb-1">
                     <Alert variant="danger" className="mb-1">
-                        User's email already exists. Sign in with {diffCredError.oldProviderId} to link your {diffCredError.newProviderId} account.
+                        User&apos;s email already exists. Sign in with {diffCredError.oldProviderId} to link your {diffCredError.newProviderId} account.
                     </Alert>
                 </div>
             }
