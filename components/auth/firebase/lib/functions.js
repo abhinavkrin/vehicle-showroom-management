@@ -48,7 +48,7 @@ export const initAuth = () => {
     projectId: process.env.FIREBASE_PROJECT_ID || null,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL || null,
     // The private key must not be accessible on the client side.
-    privateKey: process.env.FIREBASE_PRIVATE_KEY || null,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n") : null
   }
   if(typeof window === 'undefined' && process.env.GOOGLE_CREDS_PATH){
     // firebase admin has to be initialized using service acccount json file.
