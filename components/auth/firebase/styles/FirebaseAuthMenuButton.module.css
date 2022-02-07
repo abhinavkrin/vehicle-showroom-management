@@ -3,10 +3,11 @@
 }
 .authContainer {
     display: block;
-    position: absolute;
-    right: 8px;
+    position: fixed;
+    right: 50%;
+    transform: translate(50%,0);
     top: 62px;
-    width: 354px;
+    width: 350px;
     max-height: -webkit-calc(100vh - 62px - 100px);
     max-height: calc(100vh - 62px - 100px);
     overflow-y: auto;
@@ -24,7 +25,15 @@
     -webkit-user-select: text;
     user-select: text;
 }
-
+@media(min-width: 570px) {
+    .authContainer {
+        position: absolute;
+        right: 8px;
+        top: 62px;
+        width: 354px;
+        transform: translateX(0);
+    }
+}
 .avatar {
     background: var(--bs-gray-300);
     border-radius: 50%;

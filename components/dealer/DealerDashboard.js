@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import ManageVehicles from "../common/ManageVehicle";
-import ManageDealers from "./ManageDealers";
 
-function AdminDashboard(){
+function DealerDashboard(){
     const [key, setKey] = useState('vehicles');
     return (
         <Container>
@@ -11,11 +10,8 @@ function AdminDashboard(){
                 id="uncontrolled-tab-example" 
                 onSelect={setKey}
                 className="my-3">
-                <Tab eventKey="vehicles" title="Vehicles">
+                <Tab eventKey="vehicles" title="Vehicle">
                     <ManageVehicles/>
-                </Tab>
-                <Tab eventKey="dealers" title="Dealers">
-                    <ManageDealers/>
                 </Tab>
                 <Tab eventKey="bookings" title="Bookings">
                     {key}
@@ -25,4 +21,4 @@ function AdminDashboard(){
     )
 }
 
-export default AdminDashboard;
+export default DealerDashboard;

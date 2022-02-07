@@ -6,7 +6,7 @@ import { DealersContext } from "./ManageDealers";
 function DealersList({onEdit,onDelete}){
     const {dealers} = useContext(DealersContext);
     return (
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive>
             <thead>
                 <tr>
                     <th>Id</th>
