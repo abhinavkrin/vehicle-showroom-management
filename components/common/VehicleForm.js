@@ -11,8 +11,7 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
     const [model,setModel] = useState(()=>mode==='edit'?editingVehicle.data.model:'');
     const [status,setStatus] = useState(()=>mode==='edit'?editingVehicle.data.status:'');
     const [dealerId,setDealerId] = useState(()=>mode==='edit'?editingVehicle.data.dealerId:'')
-    const [image,setImage] = useState(()=>mode==='edit'?editingVehicle.data.image:'')
-    
+    const [image,setImage] = useState(null);
     useEffect(() => {
         if(user.claims.role === 'dealer'){
             setDealerId(user.id);
@@ -106,6 +105,25 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
                     placeholder="Enter vehicle's status" 
                     value={status} 
                     onChange={e => setStatus(e.target.value)}/>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="vehicle.image">
+                <Form.Label>Image</Form.Label>
+                {editingVehicle?.data?.image &&
+                    <div className="w-100 my-1">
+                        <img src={editingVehicle.data.image} alt={editingVehicle.data.name} style={{
+                            maxWidth: "300px",
+                            width: "100%",
+                            height: "Auto"
+                        }}/>
+                    </div>
+                }
+                <Form.Control
+                    name="image" 
+                    disabled={disabled}
+                    type="file" 
+                    accept='image/*'
+                    placeholder="Enter vehicle's image" 
+                    onChange={e => setImage(e.target.files[0])}/>
             </Form.Group>
             <Button variant="primary" type="submit" disabled={disabled}>
                 {mode==='edit'? 'Save':'Add'}

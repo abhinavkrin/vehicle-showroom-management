@@ -1,9 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 import Vehicle from "../../models/Vehicle";
 import VehiclesList from "./VehiclesList";
-import {addDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc} from 'firebase/firestore';
+import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, updateDoc} from 'firebase/firestore';
+import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import VehicleForm from "./VehicleForm";
 import { Button } from "react-bootstrap";
+import getFileExtension from "../../lib/getFileExtensions";
 export const VehiclesContext = createContext();
 
 function ManageVehicles(){
@@ -26,15 +28,27 @@ function ManageVehicles(){
 
     const addVehicle =  async (vehicle = new Vehicle()) => {
         setLoading(true);
-        const vehicleDocRef = await addDoc(collection(getFirestore(),'vehicles'),vehicle.data);
+        const vehicleDocRef = doc(collection(getFirestore(),'vehicles'));
+        if(vehicle.data.image instanceof File){
+            const storage = getStorage();
+            const imageRef = ref(storage,`/vehicles/${vehicleDocRef.id}.${getFileExtension(vehicle.data.image)}`);
+            const res = await uploadBytes(imageRef,vehicle.data.image);
+            vehicle.data.image = await getDownloadURL(res.ref);
+        }
+        await setDoc(vehicleDocRef,vehicle.data);
         setVehicles((oldList) => [...oldList,{...vehicle, id: vehicleDocRef.id}]);
         setLoading(false);
         setAddingVehicle(false);
     };
 
     const updateVehicle = async (vehicle = new Vehicle()) => {
-        console.log(vehicle);
         setLoading(true);
+        if(vehicle.data.image instanceof File){
+            const storage = getStorage();
+            const imageRef = ref(storage,`/vehicles/${vehicle.id}.${getFileExtension(vehicle.data.image)}`);
+            const res = await uploadBytes(imageRef,vehicle.data.image);
+            vehicle.data.image = await getDownloadURL(res.ref);
+        }
         await updateDoc(doc(getFirestore(),'vehicles',vehicle.id),vehicle.data);
         setVehicles((oldList) => {
             const newList = [...oldList];

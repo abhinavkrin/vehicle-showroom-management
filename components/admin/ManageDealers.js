@@ -22,7 +22,6 @@ function ManageDealers(){
         setAddingDealer(false);
     };
     const updateDealer = async (dealer = new Dealer()) => {
-        console.log(dealer);
         setLoading(true);
         await updateDoc(doc(getFirestore(),'dealers',dealer.id),dealer.data);
         setDealers((oldList) => {
