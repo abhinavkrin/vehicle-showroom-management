@@ -81,7 +81,7 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
                 <Form.Control
                     name="cost" 
                     disabled={disabled}
-                    type="text" 
+                    type="number" 
                     placeholder="Enter vehicle's cost in rupees" 
                     value={cost} 
                     onChange={e => setCost(e.target.value)}/>

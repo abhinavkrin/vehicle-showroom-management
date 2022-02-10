@@ -1,11 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import Vehicle from "../../models/Vehicle";
 import VehiclesList from "./VehiclesList";
-import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, updateDoc} from 'firebase/firestore';
+import {collection, deleteDoc, doc, getDocs, getFirestore, query, setDoc, updateDoc, where} from 'firebase/firestore';
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import VehicleForm from "./VehicleForm";
 import { Button } from "react-bootstrap";
 import getFileExtension from "../../lib/getFileExtensions";
+import { useFirebaseAuthUser } from "../auth/firebase";
 export const VehiclesContext = createContext();
 
 function ManageVehicles(){
@@ -13,9 +14,13 @@ function ManageVehicles(){
     const [editingVehicle,setEditingVehicle] = useState(null);
     const [loading,setLoading] = useState(true);
     const [addingVehicle,setAddingVehicle] = useState(false);
-
+    const user= useFirebaseAuthUser();
     useEffect(() => {
-        const q = query(collection(getFirestore(),'vehicles'));
+        let q;
+        if(user.claims.role === 'dealer')
+            q = query(collection(getFirestore(),'vehicles'), where("dealerId","==",user.id));
+        else 
+            q = query(collection(getFirestore(),'vehicles'));
         getDocs(q)
             .then(docsSnapshot => {
                 const docs = [];
@@ -24,7 +29,7 @@ function ManageVehicles(){
                 setLoading(false);
             }).
             catch(console.error);
-    },[]);
+    },[user]);
 
     const addVehicle =  async (vehicle = new Vehicle()) => {
         setLoading(true);

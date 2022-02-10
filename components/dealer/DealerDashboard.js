@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Container, Tab, Tabs } from "react-bootstrap";
+import ManageBookings from "../common/ManageBookings";
 import ManageVehicles from "../common/ManageVehicle";
 
 function DealerDashboard(){
@@ -14,7 +15,7 @@ function DealerDashboard(){
                     <ManageVehicles/>
                 </Tab>
                 <Tab eventKey="bookings" title="Bookings">
-                    {key}
+                    <ManageBookings/>
                 </Tab>
             </Tabs>
         </Container>

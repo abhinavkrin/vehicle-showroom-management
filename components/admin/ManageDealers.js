@@ -1,32 +1,65 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Dealer from "../../models/Dealer";
 import DealersList from "./DealersList";
-import {addDoc, collection, deleteDoc, doc, getFirestore, updateDoc} from 'firebase/firestore';
+import {collection, getDocs, getFirestore, query} from 'firebase/firestore';
 import DealerForm from "./DealerForm";
-import { AdminDataContext } from "../../pages/admin";
 import { Button } from "react-bootstrap";
+import { useFirebaseAuthUser } from "../auth/firebase";
 export const DealersContext = createContext();
 
 function ManageDealers(){
-    const {initialDealers} = useContext(AdminDataContext);
-    const [dealers,setDealers] = useState(initialDealers);
+    const [dealers,setDealers] = useState([]);
     const [editingDealer,setEditingDealer] = useState(null);
     const [loading,setLoading] = useState(false);
     const [addingDealer,setAddingDealer] = useState(false);
+    const user = useFirebaseAuthUser();
 
-    const addDealer =  async (dealer = new Dealer()) => {
+    useEffect(() => {
+        const q = query(collection(getFirestore(),'dealers'));
+        getDocs(q)
+            .then(docsSnapshot => {
+                const docs = [];
+                docsSnapshot.forEach(d => docs.push({id: d.id, data: d.data()}));
+                setDealers(docs);
+                setLoading(false);
+            }).
+            catch(console.error);
+    },[]);
+
+    const addDealer =  async (dealer = new Dealer(),password) => {
         setLoading(true);
-        const dealerDocRef = await addDoc(collection(getFirestore(),'dealers'),dealer.data);
-        setDealers((oldList) => [...oldList,{...dealer, id: dealerDocRef.id}]);
+        const token = await user.getIdToken();
+        const response = await fetch('/api/dealers', {
+            method: "POST",
+            body: JSON.stringify({
+                ...dealer.data,
+                password
+            }),
+            headers: {
+                Authorization: 'Bearer '+token,
+                'content-type': 'application/json'
+            }
+        });
+        const dealerDoc = await response.json();
+        setDealers((oldList) => [...oldList,dealerDoc]);
         setLoading(false);
         setAddingDealer(false);
     };
     const updateDealer = async (dealer = new Dealer()) => {
         setLoading(true);
-        await updateDoc(doc(getFirestore(),'dealers',dealer.id),dealer.data);
+        const token = await user.getIdToken();
+        const response = await fetch('/api/dealers', {
+                method: "PUT",
+                body: JSON.stringify(dealer),
+                headers: {
+                    Authorization: 'Bearer '+token,
+                    'content-type': 'application/json'
+                }
+        });
+        const dealerDoc = await response.json();
         setDealers((oldList) => {
             const newList = [...oldList];
-            newList.find(d => d.id === dealer.id).data = dealer.data;
+            newList.find(d => d.id === dealer.id).data = dealerDoc.data;
             return newList;
         });
         setLoading(false);
@@ -37,7 +70,15 @@ function ManageDealers(){
         if(!res)
             return;
         setLoading(true);
-        await deleteDoc(doc(getFirestore(),'dealers',dealer.id));
+        const token = await user.getIdToken();
+        await fetch('/api/dealers', {
+            method: "DELETE",
+            body: JSON.stringify(dealer),
+            headers: {
+                Authorization: 'Bearer '+token,
+                'content-type': 'application/json'
+            }
+        });
         setDealers((oldList) => {
             const newList = [...oldList].filter(d => d.id !== dealer.id);
             return newList;

@@ -6,6 +6,7 @@ function DealerForm({mode='new', onSubmit = (dealer = new Dealer()) => dealer, d
     const [name,setName] = useState(()=>mode==='edit'?editingDealer.data.name:'');
     const [email,setEmail] = useState(()=>mode==='edit'?editingDealer.data.email:'');
     const [phone,setPhone] = useState(()=>mode==='edit'?editingDealer.data.phone:'')
+    const [password,setPassword] = useState('');
 
     const onSubmitCallback = async (e) =>{
         e.preventDefault();
@@ -16,10 +17,11 @@ function DealerForm({mode='new', onSubmit = (dealer = new Dealer()) => dealer, d
         })
         if(mode === 'edit')
             dealer.id = editingDealer.id;
-        await onSubmit(dealer);
+        await onSubmit(dealer,password);
         setName('');
         setEmail('');
         setPhone('');
+        setPassword('');
     }
     return (
         <Form onSubmit={onSubmitCallback}>
@@ -44,12 +46,25 @@ function DealerForm({mode='new', onSubmit = (dealer = new Dealer()) => dealer, d
                     name="email" 
                     onChange={e => setEmail(e.target.value)}/>
             </Form.Group>
+            {mode === 'new' &&
+                <Form.Group className="mb-3" controlId="dealer.password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control 
+                        disabled={disabled}
+                        type="text" 
+                        placeholder="Enter password" 
+                        value={password}
+                        name="password" 
+                        onChange={e => setPassword(e.target.value)}/>
+                </Form.Group>
+            }
             <Form.Group className="mb-3" controlId="dealer.phone">
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
                     name="phone" 
                     disabled={disabled}
                     type="text" 
+                    isInvalid={!(/^\+[1-9]\d{1,14}$/.test(phone))}
                     placeholder="Enter dealer's phone" 
                     value={phone} 
                     onChange={e => setPhone(e.target.value)}/>

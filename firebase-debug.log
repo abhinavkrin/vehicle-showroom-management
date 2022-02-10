@@ -1,0 +1,30 @@
+[debug] [2022-02-10T09:40:40.568Z] ----------------------------------------------------------------------
+[debug] [2022-02-10T09:40:40.571Z] Command:       /usr/bin/node /usr/local/bin/firebase init
+[debug] [2022-02-10T09:40:40.572Z] CLI Version:   10.1.5
+[debug] [2022-02-10T09:40:40.572Z] Platform:      linux
+[debug] [2022-02-10T09:40:40.572Z] Node Version:  v12.22.5
+[debug] [2022-02-10T09:40:40.572Z] Time:          Thu Feb 10 2022 15:10:40 GMT+0530 (India Standard Time)
+[debug] [2022-02-10T09:40:40.572Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-02-10T09:40:40.579Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-02-10T09:40:40.579Z] > authorizing via signed-in user (avitechlab@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /home/abhinav/workspace/vehicle-showroom-management
+
+[debug] [2022-02-10T09:43:28.249Z] TypeError: Cannot read property 'setRawMode' of null
+    at ReadStream.setRawMode (tty.js:75:28)
+    at Interface._setRawMode (readline.js:290:16)
+    at Interface.close (readline.js:413:10)
+    at ReadStream.ontermend (readline.js:201:10)
+    at ReadStream.emit (events.js:326:22)
+    at ReadStream.EventEmitter.emit (domain.js:483:12)
+    at endReadableNT (_stream_readable.js:1241:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)

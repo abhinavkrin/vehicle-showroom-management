@@ -1,8 +1,13 @@
+import { getFirebaseAdmin } from 'next-firebase-auth'
 import Head from 'next/head'
 import Image from 'next/image'
+import { withFirebaseAuthUserTokenSSR } from '../components/auth/firebase'
+import VehicleCardList from '../components/shop/VehicleCardList'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+export default function Home({vehicles,dealers}) {
+  console.log(vehicles)
+  console.log(dealers)
   return (
     <div className={styles.container}>
       <Head>
@@ -12,44 +17,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <VehicleCardList vehicles={vehicles} dealers ={dealers} />
       </main>
 
       <footer className={styles.footer}>
@@ -67,3 +35,41 @@ export default function Home() {
     </div>
   )
 }
+
+export const getServerSideProps =  withFirebaseAuthUserTokenSSR()(async () => {
+  const admin = getFirebaseAdmin();
+  const vehicleDocs = await admin.firestore().collection('vehicles').get();
+  const vehicles = {
+    vehicles: {},
+    ids: []
+  };
+  const dealers = {
+    dealers: {},
+    ids: []
+  }
+  const tasks = [];
+  vehicleDocs.forEach(vehicle => {
+    tasks.push(
+      (async function(){
+        vehicles.vehicles[vehicle.id] = {id: vehicle.id,data: vehicle.data()};
+        vehicles.ids.push(vehicle.id);
+        if(!dealers.dealers[vehicle.data().dealerId]){
+          const d = await admin.firestore().collection('dealers').doc(vehicle.data().dealerId).get();
+          if(!d.exists)
+            return;
+          dealers.ids.push(d.id);
+          dealers.dealers[d.id] = {id: d.id,data: d.data()};
+        }
+      })() 
+    )
+  })
+  console.log(vehicles)
+  console.log(dealers)
+  await Promise.all(tasks);
+  return {
+    props: {
+      vehicles,
+      dealers
+    }
+  }
+})

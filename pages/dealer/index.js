@@ -39,12 +39,5 @@ export const getServerSideProps =  withFirebaseAuthUserTokenSSR()(async (ctx) =>
     const user = ctx.AuthUser;
     if(user.id && user.claims.role !== 'dealer'){
         ctx.res.statusCode = 403;
-    } else {
-
-        return {
-            props: {
-            
-            }
-        }
     }
 });
