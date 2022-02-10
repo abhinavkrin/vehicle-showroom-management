@@ -15,7 +15,21 @@
     text-transform: uppercase;
     background: var(--bs-success);
     color: white;
-    width: 150px;
+    min-width: 150px;
+    max-width: 200px;
+    display: flex;
+    justify-content: center;
+    border-radius: 0.35rem;
+}
+
+.vehicleStatusDanger {
+    font-size: 1.3rem;
+    margin: 0.5rem;
+    text-transform: uppercase;
+    background: var(--bs-danger);
+    color: white;
+    min-width: 150px;
+    max-width: 200px;
     display: flex;
     justify-content: center;
     border-radius: 0.35rem;

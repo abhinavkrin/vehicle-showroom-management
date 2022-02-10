@@ -32,6 +32,17 @@
     border-radius: 0.35rem;
 }
 
+.vehicleStatusDanger {
+    margin: 0.5rem;
+    text-transform: uppercase;
+    background: var(--bs-danger);
+    color: white;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    border-radius: 0.35rem;
+}
+
 .vehicleType {
     margin: 0.5rem;
     text-transform: uppercase;

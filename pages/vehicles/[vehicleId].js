@@ -74,7 +74,11 @@ function ViewVehicle({vehicle = new Vehicle(),dealer}){
                     <h1 className={styles.vehicleName}>
                         {vehicle.data.name} {vehicle.data.model}
                     </h1>
-                    <div className={styles.vehicleStatus}>{vehicle.data.status}</div>
+                    <div className={
+                        vehicle.data.status === 'AVAILABLE' ?
+                        styles.vehicleStatus : styles.vehicleStatusDanger}>
+                            {vehicle.data.status}
+                    </div>
                     <div className={styles.vehicleType}>{vehicle.data.type}</div>
                     <div className={styles.vehiclePrice}>Price: ₹{vehicle.data.cost}</div>
                     {
@@ -94,7 +98,9 @@ function ViewVehicle({vehicle = new Vehicle(),dealer}){
                         </div>
                         :
                         <div style={{margin: "0.5rem"}}>
-                            <Button type="button" onClick={onBuyClick} size="lg" style={{width: "200px"}}>
+                            <Button type="button" 
+                                disabled={vehicle.data.status !== 'AVAILABLE'}
+                                onClick={onBuyClick} size="lg" style={{width: "200px"}}>
                                 Buy Now
                             </Button>
                         </div>

@@ -9,7 +9,7 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
     const [type,setType] = useState(()=>mode==='edit'?editingVehicle.data.type:'');
     const [cost,setCost] = useState(()=>mode==='edit'?editingVehicle.data.cost:'');
     const [model,setModel] = useState(()=>mode==='edit'?editingVehicle.data.model:'');
-    const [status,setStatus] = useState(()=>mode==='edit'?editingVehicle.data.status:'');
+    const [status,setStatus] = useState(()=>mode==='edit'?editingVehicle.data.status:'AVAILABLE');
     const [dealerId,setDealerId] = useState(()=>mode==='edit'?editingVehicle.data.dealerId:'')
     const [image,setImage] = useState(null);
     useEffect(() => {
@@ -27,7 +27,7 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
             model,
             status,
             dealerId,
-            image
+            image: image || editingVehicle.data.image
         })
         if(mode === 'edit')
             vehicle.id = editingVehicle.id;
@@ -36,7 +36,7 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
         setType('');
         setCost('');
         setModel('');
-        setStatus('');
+        setStatus('AVAILABLE');
         setDealerId('');
         setImage('');
     }
@@ -98,13 +98,15 @@ function VehicleForm({mode='new', onSubmit = (vehicle = new Vehicle()) => vehicl
             </Form.Group>
             <Form.Group className="mb-3" controlId="vehicle.status">
                 <Form.Label>Status</Form.Label>
-                <Form.Control
+                <Form.Select
                     name="status" 
                     disabled={disabled}
-                    type="text" 
-                    placeholder="Enter vehicle's status" 
-                    value={status} 
-                    onChange={e => setStatus(e.target.value)}/>
+                    value={status}
+                    defaultValue={status} 
+                    onChange={e => setStatus(e.target.value)}>
+                    <option value={"AVAILABLE"}>AVAILABLE</option>
+                    <option value={"NOT AVAILABLE"}>NOT AVAILABLE</option>
+                </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3" controlId="vehicle.image">
                 <Form.Label>Image</Form.Label>

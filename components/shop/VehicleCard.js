@@ -19,7 +19,9 @@ export default function VehicleCard({vehicle = new Vehicle}){
                             <h1 className={styles.vehicleName}>
                                 {vehicle.data.name} {vehicle.data.model}
                             </h1>
-                            <div className={styles.vehicleStatus}>{vehicle.data.status}</div>
+                            <div className={vehicle.data.status === 'AVAILABLE' ? styles.vehicleStatus : styles.vehicleStatusDanger}>
+                                {vehicle.data.status}
+                            </div>
                             <div className={styles.vehicleType}>{vehicle.data.type}</div>
                             <div style={{margin: "0.5rem"}}>
                                 <span className={styles.vehiclePrice}>Price: ₹{vehicle.data.cost}</span>
