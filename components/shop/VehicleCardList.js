@@ -4,7 +4,7 @@ import VehicleCard from "./VehicleCard";
 
 export default function VehicleCardList({vehicles,dealers}){
     return (
-        <Container>
+        <Container className="d-flex flex-row flex-wrap justify-content-around">
             {
             vehicles.ids.map(vid => 
                 <VehicleCard key={vid} 

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Navbar, Nav, NavDropdown, Container, NavbarBrand } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavbarBrand } from 'react-bootstrap';
 import styles from '../styles/Menubar.module.css';
 import FirebaseAuthMenuButton from './auth/firebase/ui/FirebaseAuthMenuButton';
 
-export default function Menubar(props) {
+export default function Menubar() {
   const [collapsed, setCollapsed] = useState(true);
 
   return (
@@ -43,28 +43,18 @@ export default function Menubar(props) {
         </Navbar.Toggle>
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='mx-auto'>
-            {props.menu?.body?.map(item => {
-              return item.sub_menus ? (
-                <NavDropdown
-                  title={item.label}
-                  className={`ml-4 fw-light ${styles.navbarItem}`}
-                >
-                  {item.sub_menus.map((sub,i) => (
-                    <NavDropdown.Item
-                      key={sub.url+i}
-                      href={sub.url}
-                      className={['dropdown-toggle']}
-                    >
-                      {sub.label}
-                    </NavDropdown.Item>
-                  ))}
-                </NavDropdown>
-              ) : (
-                <Nav.Link href={item.url} className='fw-light'>
-                  {item.label}
-                </Nav.Link>
-              );
-            })}
+            <Nav.Link href='/' className='fw-light'>
+                Home
+            </Nav.Link>
+            <Nav.Link href='/admin' className='fw-light'>
+                Admin
+            </Nav.Link>
+            <Nav.Link href='/dealer' className='fw-light'>
+                Dealer
+            </Nav.Link>
+            <Nav.Link href='/mybookings' className='fw-light'>
+                My bookings
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
         <div className="mx-1">

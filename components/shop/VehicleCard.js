@@ -1,24 +1,33 @@
 import Link from "next/link";
-import { Button } from "react-bootstrap";
-import Dealer from "../../models/Dealer";
+import { Col, Container, Row } from "react-bootstrap";
 import Vehicle from "../../models/Vehicle";
-
-export default function VehicleCard({vehicle = new Vehicle, dealer = new Dealer()}){
+import styles from './VehicleCard.module.css';
+export default function VehicleCard({vehicle = new Vehicle}){
     return (
-        <div className="flux-product">
-            <img src={vehicle.data.image} alt={vehicle.data.name}/>
-            <div className="flux-product-detail">
-              <h1 className="name">{vehicle.data.name} {vehicle.data.model}</h1>
-              <div className="description">{vehicle.data.status}</div>
-              <span className="price">Price: ₹{vehicle.data.cost}</span>
-              <Link href={`/vehicles/${vehicle.id}`}>
-                    <a>
-                        <Button type="button">
-                            View
-                        </Button>
-                    </a>
-              </Link>
-            </div>
-        </div>
+        <Link href={`/vehicles/${vehicle.id}`}>
+            <a style={{textDecoration: "none", color: "unset"}}>
+                <Container className={styles.vehicleCard}>
+                    <Row>
+                        <Col xs={12} className="d-flex justify-content-center">
+                            <img 
+                                src={vehicle.data.image} 
+                                alt={vehicle.data.name}
+                                className={styles.vehicleImage}
+                                />
+                        </Col>
+                        <Col xs={12}>
+                            <h1 className={styles.vehicleName}>
+                                {vehicle.data.name} {vehicle.data.model}
+                            </h1>
+                            <div className={styles.vehicleStatus}>{vehicle.data.status}</div>
+                            <div className={styles.vehicleType}>{vehicle.data.type}</div>
+                            <div style={{margin: "0.5rem"}}>
+                                <span className={styles.vehiclePrice}>Price: ₹{vehicle.data.cost}</span>
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </a>
+        </Link>
     )
 }
