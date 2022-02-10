@@ -5,6 +5,7 @@ import { Container, Button, Row, Col} from 'react-bootstrap';
 import {useEffect,useState} from 'react';
 import styles from './viewVehicle.module.css';
 import { FaEnvelope, FaPhone, FaUserCircle } from "react-icons/fa";
+import Link from "next/link";
 
 function ViewVehicle({vehicle = new Vehicle(),dealer}){
     const user = useFirebaseAuthUser();
@@ -88,7 +89,7 @@ function ViewVehicle({vehicle = new Vehicle(),dealer}){
                                 <div>{paymentResponse.razorpay_payment_id}</div>
                             </div>
                             <p className={styles.paymentSuccessMessage}>
-                                We have received your order. It may take a few minutes to process your order. Go to <a href="/mybookings">My bookings</a>.
+                                We have received your order. It may take a few minutes to process your order. Go to <Link href="/mybookings"><a>My bookings</a></Link>.
                             </p>
                         </div>
                         :
