@@ -20,7 +20,6 @@ function BookingsList(){
             <tbody>
                 {bookings.map(booking => (
                     <tr key={booking.id}>
-                        {console.log(booking.data.createdAt.seconds)}
                         <td>{booking.id}</td>
                         <td>{booking.data.customerId}</td>
                         <td>{booking.data.dealerId}</td>
